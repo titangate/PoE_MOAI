@@ -1,0 +1,10 @@
+{
+	"name":"moai",
+	"version":"42",
+	"manifest_version":2,
+	"app": {
+	    "launch": {
+	      "local_path": "moai.html"
+	    }
+  	}
+}
