@@ -4,6 +4,8 @@
 -- http://getmoai.com
 ----------------------------------------------------------------
 
+require 'middleclass'
+
 MOAISim.openWindow ( "test", 1024, 600 )
 
 viewport = MOAIViewport.new ()
