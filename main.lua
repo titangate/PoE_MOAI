@@ -5,6 +5,14 @@
 ----------------------------------------------------------------
 
 require 'middleclass'
+require 'library.init'
+require 'playground.maintest'
+
+RUNMODE = 'UNITTEST'
+if RUNMODE == 'UNITTEST' then
+require 'unittest.init'
+return
+end
 
 MOAISim.openWindow ( "test", 1024, 600 )
 
