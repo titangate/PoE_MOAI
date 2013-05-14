@@ -17,7 +17,11 @@ end
 
 function StaticImageActor:getPosition()
 	-- todo: load actual position
-	return 600,0
+	return 0,0
+end
+
+function StaticImageActor:getAngle()
+	return 0
 end
 
 function StaticImageActor:getProp()
@@ -27,4 +31,10 @@ function StaticImageActor:getProp()
 	self.prop:setDeck(self.sprite)
 	self.prop:setLoc(self:getPosition())
 	return self.prop
+end
+
+function StaticImageActor:update()
+	self.sprite:setRect(unpack(self.quad))
+	self.prop:setLoc(self:getPosition())
+	self.prop:setRot(self:getAngle())
 end
