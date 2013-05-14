@@ -8,10 +8,13 @@ require 'middleclass'
 require 'library.init'
 require 'playground.maintest'
 
-RUNMODE = 'UNITTEST'
+RUNMODE = 'GFXTEST'
 if RUNMODE == 'UNITTEST' then
 require 'unittest.init'
 return
+elseif RUNMODE == 'GFXTEST' then
+	require 'test.gfxtest'()
+	return
 end
 
 MOAISim.openWindow ( "test", 1024, 600 )

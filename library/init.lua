@@ -1,3 +1,6 @@
 require 'library.serializable'
 require 'library.conf'
 require 'library.util'
+require 'library.resource'
+require 'library.actor'
+require 'library.actorlayer'
