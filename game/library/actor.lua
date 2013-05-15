@@ -24,6 +24,11 @@ function StaticImageActor:getAngle()
 	return 0
 end
 
+function StaticImageActor:getDimension()
+	local x1,y1,x2,y2 = unpack(self.quad)
+	return math.abs(x2-x1),math.abs(y2-y1)
+end
+
 function StaticImageActor:getProp()
 	if self.prop == nil then
 		self.prop = MOAIProp2D.new()
@@ -37,4 +42,9 @@ function StaticImageActor:update()
 	self.sprite:setRect(unpack(self.quad))
 	self.prop:setLoc(self:getPosition())
 	self.prop:setRot(self:getAngle())
+end
+
+function StaticImageActor:loadShader(shader)
+	assert(shader,"invalid shader")
+	self.prop:setShader(shader)
 end

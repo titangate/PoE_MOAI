@@ -6,6 +6,7 @@
 
 require 'middleclass'
 require 'library.init'
+require 'shader.init'
 require 'playground.maintest'
 require 'config'
 
@@ -16,6 +17,7 @@ return
 elseif RUNMODE == 'GFXTEST' then
 	require 'test.gfxtest'()
 	return
+elseif RUNMODE == 'CMDTEST' then
 end
 
 MOAISim.openWindow ( "test", 1024, 600 )
