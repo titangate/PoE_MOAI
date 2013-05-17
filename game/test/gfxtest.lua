@@ -14,6 +14,11 @@ SIA.image = 'banner.png'
 SIA.quad = {-468, -144, 468, 144}
 SIA:load()
 AL:addActor(SIA)
---AL.layer:setShader(Shader.vibrate(SIA))
-SIA:loadShader(Shader.vibrate(SIA))
+SIA:loadShader(Shader.blur(SIA))
+local c = Camera()
+c:load()
+c:follow(SIA)
+AL.layer:setCamera(c.camera)
+SIA:setPosition(300,300)
+c:update(1)
 end

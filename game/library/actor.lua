@@ -17,7 +17,12 @@ end
 
 function StaticImageActor:getPosition()
 	-- todo: load actual position
-	return 0,0
+	return self.x,self.y
+end
+
+function StaticImageActor:setPosition(x,y)
+	self.x,self.y = x,y
+	self.prop:setLoc(self:getPosition())
 end
 
 function StaticImageActor:getAngle()
