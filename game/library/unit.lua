@@ -14,6 +14,12 @@ end
 function Unit:setPosition(x,y)
 end
 
+function Unit:setAngle(angle)
+end
+
+function Unit:setAngleHead(angle)
+end
+
 function Unit:getPosition()
 end
 
@@ -34,4 +40,15 @@ end
 
 function Unit:instruct(...)
 	
+end
+
+function Unit:getActor()
+	if self.actor == nil then
+		self.actor = DebugUnitActor()
+		self.actor:loadDefaultImage()
+		self.actor:load()
+		self.delegate = self
+		-- todo: finish configuring actor
+	end
+	return self.actor
 end

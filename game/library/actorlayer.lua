@@ -14,7 +14,11 @@ function ActorLayer:loadGFX(viewport)
 	self.layer:setViewport(viewport)
 end
 
-function ActorLayer:addActor(actor)
-	table.insert(self.actors,actor)
-	self.layer:insertProp(actor:getProp())
+function ActorLayer:addActor(...)
+	for k,v in ipairs(arg) do
+		table.insert(self.actors,v)
+		for prop in v:getProp() do
+			self.layer:insertProp(prop)
+		end
+	end
 end

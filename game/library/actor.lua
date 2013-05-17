@@ -15,16 +15,6 @@ function StaticImageActor:load()
 	self.sprite:setRect(unpack(self.quad))
 end
 
-function StaticImageActor:getPosition()
-	-- todo: load actual position
-	return self.x,self.y
-end
-
-function StaticImageActor:setPosition(x,y)
-	self.x,self.y = x,y
-	self.prop:setLoc(self:getPosition())
-end
-
 function StaticImageActor:getAngle()
 	return 0
 end
@@ -39,14 +29,18 @@ function StaticImageActor:getProp()
 		self.prop = MOAIProp2D.new()
 	end
 	self.prop:setDeck(self.sprite)
-	self.prop:setLoc(self:getPosition())
+	if self.delegate then
+		self.prop:setLoc(self.delegate:getPosition())
+	end
 	return self.prop
 end
 
 function StaticImageActor:update()
 	self.sprite:setRect(unpack(self.quad))
-	self.prop:setLoc(self:getPosition())
-	self.prop:setRot(self:getAngle())
+	if self.delegate then
+		self.prop:setLoc(self.delegate:getPosition())
+		self.prop:setRot(self.delegate:getAngle())
+	end
 end
 
 function StaticImageActor:loadShader(shader)
