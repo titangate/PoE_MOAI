@@ -13,4 +13,18 @@ local unit2 = Unit()
 unit2:setPosition(300,0)
 --simpleScene:addUnit(unit2)
 
+local prevElapsedTime = MOAISim.getDeviceTime()
+local elapsedTime = 0
+local thread = MOAICoroutine.new()
+thread:run(
+		function()
+			while (true) do
+			local currElapsedTime = MOAISim.getDeviceTime()
+			elapsedTime = currElapsedTime - prevElapsedTime
+			prevElapsedTime = currElapsedTime
+			simpleScene:update(elapsedTime)
+			coroutine.yield()
+		end
+	end
+	)
 end
