@@ -17,8 +17,16 @@ end
 function ActorLayer:addActor(...)
 	for k,v in ipairs(arg) do
 		table.insert(self.actors,v)
-		for prop in v:getProp() do
-			self.layer:insertProp(prop)
+		if v.getProps then
+			for prop in v:getProps() do
+				self.layer:insertProp(prop)
+			end
+		else
+			self.layer:insertProp(v:getProp())
 		end
 	end
+end
+
+function ActorLayer:getProp()
+	return self.layer
 end
