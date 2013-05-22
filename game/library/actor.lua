@@ -15,7 +15,7 @@ function StaticImageActor:load()
 	self.sprite:setRect(unpack(self.quad))
 end
 
-function StaticImageActor:getDimension()
+function StaticImageActor:getSize()
 	local x1,y1,x2,y2 = unpack(self.quad)
 	return math.abs(x2-x1),math.abs(y2-y1)
 end

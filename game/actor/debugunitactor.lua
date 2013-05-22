@@ -42,7 +42,7 @@ function DebugUnitActor:getAngle()
 	return self.r
 end
 
-function DebugUnitActor:getDimension()
+function DebugUnitActor:getSize()
 	local x1,y1,x2,y2 = unpack(self.quad)
 	return math.abs(x2-x1),math.abs(y2-y1)
 end

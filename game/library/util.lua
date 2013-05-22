@@ -21,7 +21,7 @@ function assertSameObject(a,b)
 	end
 end
 
-function quadGetDimension(q)
+function quadgetSize(q)
 	return math.abs(q[3]-q[1]),math.abs(q[4]-q[2])
 end
 

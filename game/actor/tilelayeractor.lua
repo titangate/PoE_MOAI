@@ -6,7 +6,7 @@ function TileLayerActor:load()
 	assert(self.quad,"invalid quad")
 	self.sprite = MOAITileDeck2D.new()
 	self.sprite:setTexture(requireTexture(self.image))
-	local w,h = quadGetDimension(self.quad)
+	local w,h = quadgetSize(self.quad)
 	self.sprite:setSize(math.floor(w/self.wGrid),math.floor(h/self.hGrid))
 
 	
