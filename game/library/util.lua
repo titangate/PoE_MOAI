@@ -24,3 +24,14 @@ end
 function quadGetDimension(q)
 	return math.abs(q[3]-q[1]),math.abs(q[4]-q[2])
 end
+
+function ensureEntries(t,...)
+	for i,v in ipairs(arg) do
+		if t[v] then
+			assert (type(t[v]) == 'table')
+		else
+			t[v] = {}
+		end
+		t = t[v]
+	end
+end

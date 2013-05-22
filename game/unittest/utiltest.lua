@@ -18,4 +18,10 @@ a = {1,'hello',{2,'world'}}
 b = {1,'hello',{2,'world'}}
 assertSameObject(a,b)
 
+t = {}
+ensureEntries(t,'a')
+assert(t.a,"table entry missing: t['a']")
+ensureEntries(t,'a',1)
+assert(t.a[1],"table entry missing: t['a'][1]")
+
 end

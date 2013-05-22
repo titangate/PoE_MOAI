@@ -11,7 +11,7 @@ function StaticImageActor:load()
 	end
 
 	self.sprite = MOAIGfxQuad2D.new()
-	self.sprite:setTexture(self.image)
+	self.sprite:setTexture(requireTexture(self.image))
 	self.sprite:setRect(unpack(self.quad))
 end
 

@@ -3,13 +3,15 @@ setmetatable( textureRepo , {
 	__mode = "k"
 	}) -- weak reference, unused texture is collected
 
-function requireTexture(tex)
-	if textureRepo[tex] == nil then
-		textureRepo[tex] = MOAIImage.new()
-		textureRepo[tex]:load(tex)
+function requireTexture(tex,tag)
+	tag = tag or 'default'
+	ensureEntries(textureRepo,tag)
+	if textureRepo[tag][tex] == nil then
+		textureRepo[tag][tex] = MOAITexture.new()
+		textureRepo[tag][tex]:load(tex)
 		-- feature: default image
 	end
-	return textureRepo[tex]
+	return textureRepo[tag][tex]
 end
 
 function neartwo(n)

@@ -11,10 +11,10 @@ function DebugUnitActor:load()
 	end
 
 	self.spriteBody = MOAIGfxQuad2D.new()
-	self.spriteBody:setTexture(self.imageBody)
+	self.spriteBody:setTexture(requireTexture(self.imageBody))
 	self.spriteBody:setRect(unpack(self.quad))
 	self.spriteHead = MOAIGfxQuad2D.new()
-	self.spriteHead:setTexture(self.imageHead)
+	self.spriteHead:setTexture(requireTexture(self.imageHead))
 	self.spriteHead:setRect(unpack(self.quadHead))
 	self.prop = {}
 	self.r = self.r or 0

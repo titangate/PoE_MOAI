@@ -30,9 +30,9 @@ local unit1 = Unit()
 unit1:setPosition(300,300)
 simpleScene:addUnit(unit1)
 local unit2 = Unit()
-unit2:setPosition(300,300)
+unit2:setPosition(400,300)
+simpleScene:addUnit(unit2)
 simpleScene.camera:follow(unit1)
---simpleScene:addUnit(unit2)
 
 local prevElapsedTime = MOAISim.getDeviceTime()
 local elapsedTime = 0
@@ -45,6 +45,7 @@ thread:run(
 			prevElapsedTime = currElapsedTime
 			simpleScene:update(elapsedTime)
 			unit1:update(elapsedTime)
+			unit2:update(elapsedTime)
 			coroutine.yield()
 		end
 	end
