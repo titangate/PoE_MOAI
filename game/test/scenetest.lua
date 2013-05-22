@@ -10,12 +10,17 @@ tilelayer.h = 10
 tilelayer.wGrid = 64
 tilelayer.hGrid = 64
 tilelayer.image = 'asset/basicwall.png'
-tilelayer.quad = {-128,-32,128,32}
+tilelayer.quad = {-256,-32,256,32}
+tilelayer.tilesetDef = {
+1,1,1,0,1
+}
 tilelayer:load()
 
-tilelayer:setTile(1,1,{tile=3,flags=0})
-tilelayer:setTile(2,1,{tile=1,flags=0})
-tilelayer:setTile(3,1,{tile=2,flags=0})
+tilelayer:setTile(1,1,5)
+tilelayer:setTile(2,1,4)
+tilelayer:setTile(3,1,4)
+tilelayer:setTile(4,1,4)
+tilelayer:setTile(5,1,5)
 
 local simpleScene = Map()
 simpleScene.width,simpleScene.height = 40,40

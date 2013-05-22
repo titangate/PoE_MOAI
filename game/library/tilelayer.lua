@@ -4,6 +4,7 @@ function TileLayer:load()
 	assert(self.image,"invalid image")
 	assert(self.w and self.h,"invalid size")
 	assert(self.wGrid and self.hGrid,"invalid grid size")
+	assert(self.tilesetDef, "invalid tile set definition")
 	--assert(self.wTile and self.hTile,"invalid tile grid size")
 	--assert(self.gridDef,"invalid grid definition")
 	self.grid = MOAIGrid.new()
@@ -35,9 +36,9 @@ function TileLayer:getActor()
 	return self.actor
 end
 
-function TileLayer:setTile(x,y,tileDef)
-	self.grid:setTile(x,y,tileDef.tile)
-	self.grid:setTileFlags(x,y,tileDef.flags)
+function TileLayer:setTile(x,y,tile)
+	self.grid:setTile(x,y,tile)
+	self.grid:setTileFlags(x,y,self.tilesetDef[tile])
 end
 
 function TileLayer:getTile(x,y)

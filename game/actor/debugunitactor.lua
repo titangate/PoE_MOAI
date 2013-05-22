@@ -51,12 +51,14 @@ function DebugUnitActor:getProps()
 	if self.propHead == nil then
 		self.propHead = MOAIProp2D.new()
 		self.prop[2] = self.propHead
+		self.propHead:setScl(.5)
 	end
 	self.propHead:setDeck(self.spriteHead)
 	self.propHead:setLoc(self:getPosition())
 	if self.propBody == nil then
 		self.propBody = MOAIProp2D.new()
 		self.prop[1] = self.propBody
+		self.propBody:setScl(.5)
 	end
 	self.propBody:setDeck(self.spriteBody)
 	self.propHead:setLoc(self:getPosition())
