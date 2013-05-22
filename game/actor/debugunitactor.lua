@@ -47,7 +47,7 @@ function DebugUnitActor:getDimension()
 	return math.abs(x2-x1),math.abs(y2-y1)
 end
 
-function DebugUnitActor:getProp()
+function DebugUnitActor:getProps()
 	if self.propHead == nil then
 		self.propHead = MOAIProp2D.new()
 		self.prop[2] = self.propHead
