@@ -17,9 +17,16 @@ function Map:load(viewport)
 		self:setTileLayer(self.tileLayer)
 	end
 	MOAIRenderMgr.pushRenderPass(self.layer.layer)
+
+
+	local c = Camera()
+	c:load()
+	self.camera = c
+	self.layer.layer:setCamera(c.camera)
 end
 
 function Map:update(dt)
+	self.camera:update(dt)
 end
 
 function Map:addUnit(unit)

@@ -15,10 +15,6 @@ function StaticImageActor:load()
 	self.sprite:setRect(unpack(self.quad))
 end
 
-function StaticImageActor:getAngle()
-	return 0
-end
-
 function StaticImageActor:getDimension()
 	local x1,y1,x2,y2 = unpack(self.quad)
 	return math.abs(x2-x1),math.abs(y2-y1)

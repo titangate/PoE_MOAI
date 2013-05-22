@@ -5,8 +5,8 @@ print("Starting up on:" .. MOAIEnvironment.osBrand  .. " version:" .. (MOAIEnvir
 
 -- tile layer test
 local tilelayer = TileLayer()
-tilelayer.w = 10
-tilelayer.h = 10
+tilelayer.w = 30
+tilelayer.h = 20
 tilelayer.wGrid = 64
 tilelayer.hGrid = 64
 tilelayer.image = 'asset/basicwall.png'
@@ -15,23 +15,23 @@ tilelayer.tilesetDef = {
 1,1,1,0,1
 }
 tilelayer:load()
-
-tilelayer:setTile(1,1,5)
-tilelayer:setTile(2,1,4)
-tilelayer:setTile(3,1,4)
-tilelayer:setTile(4,1,4)
-tilelayer:setTile(5,1,5)
-
+local t = require 'map.testmap'.terrain
+for j=0,19 do
+	for i=1,30 do
+		tilelayer:setTile(i,j,t[j*30+i]+4)
+	end
+end
 local simpleScene = Map()
 simpleScene.width,simpleScene.height = 40,40
 simpleScene.ratio = 32
 simpleScene.tileLayer = tilelayer
 simpleScene:load(viewport)
 local unit1 = Unit()
-unit1:setPosition(0,0)
+unit1:setPosition(300,300)
 simpleScene:addUnit(unit1)
 local unit2 = Unit()
-unit2:setPosition(300,0)
+unit2:setPosition(300,300)
+simpleScene.camera:follow(unit1)
 --simpleScene:addUnit(unit2)
 
 local prevElapsedTime = MOAISim.getDeviceTime()
@@ -44,6 +44,7 @@ thread:run(
 			elapsedTime = currElapsedTime - prevElapsedTime
 			prevElapsedTime = currElapsedTime
 			simpleScene:update(elapsedTime)
+			unit1:update(elapsedTime)
 			coroutine.yield()
 		end
 	end

@@ -71,8 +71,10 @@ end
 
 function DebugUnitActor:update()
 	self.spriteBody:setRect(unpack(self.quad))
-	self.propBody:setLoc(self:getPosition())
-	self.propHead:setLoc(self:getPosition())
+	if self.delegate then
+		self.propBody:setLoc(self.delegate:getPosition())
+		self.propHead:setLoc(self.delegate:getPosition())
+	end
 	self.propBody:setRot(self.r)
 	self.propHead:setRot(self.r + self.rHead)
 end
