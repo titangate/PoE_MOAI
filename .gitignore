@@ -2,3 +2,4 @@
 *.love
 unittest_temp
 *.psd
+runtest.lua
