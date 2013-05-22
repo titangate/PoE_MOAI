@@ -14,5 +14,11 @@ viewport = MOAIViewport.new()
 viewport:setSize(screenWidth,screenHeight)
 viewport:setScale(screenWidth,screenHeight)
 if MOAIEnvironment.osBrand == 'iOS' then
+	POE_CONTROLSCHEME = 'mobile'
 	viewport:setRotation(90)
+	if MOAIEnvironment.iosRetinaDisplay then
+		POE_GLOBALSCALE = 2.0
+	end
+else
+	POE_CONTROLSCHEME = 'desktop'
 end

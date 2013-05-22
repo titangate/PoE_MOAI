@@ -23,6 +23,9 @@ function Map:load(viewport)
 	c:load()
 	self.camera = c
 	self.layer.layer:setCamera(c.camera)
+	if POE_GLOBALSCALE then
+		self.camera.camera:setScl(1/POE_GLOBALSCALE)
+	end
 end
 
 function Map:update(dt)
