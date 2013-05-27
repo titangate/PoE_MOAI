@@ -1,8 +1,11 @@
 Widget = ActorLayer:subclass'Widget'
 
-function Widget.init(viewport)
+function Widget.init(x,y,w,h)
 	Widget.base = Widget()
-	Widget.base:loadGFX(viewport)
+	local vp = MOAIViewport.new()
+	vp:setOffset(x,y)
+	vp:setSize(w,h)
+	Widget.base:loadGFX(vp)
 	Widget.base:setStyle{} -- default style
 	return Widget.base
 end
@@ -59,4 +62,9 @@ end
 
 function Widget:getStyle()
 	return self.style or self.parent:getStyle()
+end
+
+function Widget:addGestureRecognizer(recognizer)
+	ensureEntries(self,'recognizers')
+	self.recognizers[recognizer] = true
 end

@@ -35,3 +35,26 @@ function ensureEntries(t,...)
 		t = t[v]
 	end
 end
+
+function magnitude(x1,y1)
+	return (x1*x1+y1*y1)^.5
+end
+
+function distanceSquare(x1,y1,x2,y2)
+	if x2 == nil then
+		x2 = y1
+		x1,y1 = unpack(x1)
+		x2,y2 = unpack(x2)
+	end
+	return (x1-x2)^2+(y1-y2)^2
+end
+
+function findAveragePoint(t)
+	local tx,ty = 0,0
+	for i,v in ipairs(t) do
+		local x,y = unpack(v)
+		tx = tx + x
+		ty = ty + y
+	end
+	return {tx/#t,ty/#t}
+end
