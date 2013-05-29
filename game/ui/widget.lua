@@ -17,9 +17,9 @@ function Widget:load()
 	vp:setOffset(self.x,self.y)
 	vp:setSize(self.w,self.h)
 	vp:setScale(self.w,self.h)
+	self:loadGFX(vp)
 	self:setScale(1,1)
 	self:setAngle(0)
-	self:loadGFX(vp)
 	self.children = self.children or {}
 end
 
@@ -68,14 +68,20 @@ end
  
 function Widget:setPosition(x,y)
 	self.x,self.y = x,y
+	self.layer:setLoc(x,y)
+	local vp = self.layer:getViewport()
+	vp:setOffset(x,y)
+	self.layer:setViewport(vp)
 end
  
 function Widget:setScale(sx,sy)
 	self.sx,self.sy = sx,sy
+	self.layer:setScl(sx,sy)
 end
  
 function Widget:setAngle(angle)
 	self.angle = angle
+	self.layer:setRot(R2D(angle))
 end
  
 function Widget:getPosition()
@@ -114,7 +120,7 @@ function Widget:setBackgroundImage(image,quad)
 	else
 		self.backgroundImage.quad = standardQuad(self.w,self.h)
 	end
-	self.backgroundImage.delegate = self
+	--self.backgroundImage.delegate = self
 	self.backgroundImage:load()
 	self:addActor(self.backgroundImage)
 	self:updateBackgroundImage()

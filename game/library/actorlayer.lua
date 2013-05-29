@@ -1,7 +1,6 @@
 ActorLayer = Serializable:subclass'ActorLayer'
 
 function ActorLayer:load()
-	assert(self.actors,"invalid actor group")
 end
 
 function ActorLayer:clear()
@@ -20,11 +19,13 @@ function ActorLayer:addActor(...)
 		if v.getProps then
 			for prop in v:getProps() do
 				self.layer:insertProp(prop)
-				prop:setParent(self.layer)
+				--prop:setParent(self.layer)
+				prop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.layer, MOAIProp.TRANSFORM_TRAIT)
 			end
 		else
 			self.layer:insertProp(v:getProp())
-			v:getProp():setParent(self.layer)
+			--v:getProp():setParent(self.layer)
+			v:getProp():setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.layer, MOAIProp.TRANSFORM_TRAIT)
 		end
 	end
 end
