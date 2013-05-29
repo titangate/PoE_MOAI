@@ -59,17 +59,28 @@ function Widget:addWidget(child)
 end
 
 function Widget:removeWidget(child)
+	local idx
 	if type(child) ~= 'number' then
 		for i,v in ipairs(self.children) do
 			if v == child then
-				child = i
+				idx,child = i,v
 				break
 			end
 		end
 	end
 	child.parent = nil
-	table.remove(self.children,child)
+	table.remove(self.children,idx)
+	child:clear()
+	ActorLayer.removeActor(self,child)
 end
+
+function Widget:clear()
+	self:removeActor(self.backgroundImage)
+	for i,v in ipairs(self.children) do
+		self:removeWidget(v)
+	end
+end
+
 function Widget:setSize(w,h)
 	self.w,self.h = w,h
 end
@@ -122,6 +133,7 @@ function Widget:setBackgroundImage(image,quad)
 	if self.backgroundImage then
 		self.ActorLayer:removeActor(self.backgroundImage)
 	end
+	if not image then return end
 	self.backgroundImage = StaticImageActor()
 	self.backgroundImage.image = image
 	if quad then
@@ -140,6 +152,14 @@ function Widget:updateBackgroundImage()
 	assert(self.backgroundImage,"no background image set")
 	self.backgroundImage.quad = standardQuad(self.w,self.h)
 	self.backgroundImage:update()
+end
+
+
+function Widget:getProps()
+	return coroutine.wrap(function()
+	    coroutine.yield(self.group)
+	    if self.debugprop then coroutine.yield(self.debugprop) end
+	  end)
 end
 
 function Widget:enableDebugProp(debugEnabled)

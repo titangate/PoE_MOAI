@@ -13,19 +13,45 @@ function ActorLayer:loadGFX(viewport)
 	self.actors = {}
 end
 
+function ActorLayer:addProp(prop)
+	print ('attempt to add prop',prop)
+	self.layer:insertProp(prop)
+	prop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
+end
+
+function ActorLayer:removeProp(prop)
+	print ('attemp to remove prop',prop)
+	self.layer:removeProp(prop)
+end
+
 function ActorLayer:addActor(...)
 	for k,v in ipairs(arg) do
 		table.insert(self.actors,v)
 		if v.getProps then
 			for prop in v:getProps() do
-				self.layer:insertProp(prop)
-				--prop:setParent(self.layer)
-				prop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
+				self:addProp(prop)
 			end
 		else
-			self.layer:insertProp(v:getProp())
-			--v:getProp():setParent(self.layer)
-			v:getProp():setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
+			self:addProp(v:getProp())
+		end
+	end
+end
+
+function ActorLayer:removeActor(...)
+	for k,v in ipairs(arg) do
+		for i,actor in pairs(self.actors) do
+			print (actor,v)
+			if actor == v then
+				table.remove(self.actors,i)
+				if v.getProps then
+					for prop in v:getProps() do
+						self:removeProp(prop)
+					end
+				else
+					self:removeProp(v:getProp())
+				end
+				break
+			end
 		end
 	end
 end
