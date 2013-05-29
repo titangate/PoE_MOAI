@@ -14,13 +14,11 @@ function ActorLayer:loadGFX(viewport)
 end
 
 function ActorLayer:addProp(prop)
-	print ('attempt to add prop',prop)
 	self.layer:insertProp(prop)
 	prop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
 end
 
 function ActorLayer:removeProp(prop)
-	print ('attemp to remove prop',prop)
 	self.layer:removeProp(prop)
 end
 
@@ -40,7 +38,6 @@ end
 function ActorLayer:removeActor(...)
 	for k,v in ipairs(arg) do
 		for i,actor in pairs(self.actors) do
-			print (actor,v)
 			if actor == v then
 				table.remove(self.actors,i)
 				if v.getProps then

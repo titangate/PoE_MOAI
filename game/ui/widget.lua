@@ -173,10 +173,8 @@ function Widget:enableDebugProp(debugEnabled)
 				MOAIDraw.drawLine(dx,dy,dx2+10,dy)
 				MOAIDraw.drawLine(dx,dy,dx,dy2+10)
 			end)
-			print 'deck set'
 			self.debugprop:setDeck(deck)
 		end
-		print 'prop aded'
 		self.layer:insertProp(self.debugprop)
 		self.debugprop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
 	end
