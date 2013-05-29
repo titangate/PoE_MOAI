@@ -56,7 +56,6 @@ function GestureRecognizer:recognized()
 end
 
 function GestureRecognizer:shouldRecognize()
-	if self:recognized() then return end
 	if self.requireFailedGestures then
 		for i,v in ipairs(self.requireFailedGestures) do
 			if v:recognized() then

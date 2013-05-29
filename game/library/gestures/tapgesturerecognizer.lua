@@ -1,5 +1,5 @@
 local TAP_INTERVAL_THRESHOLD = 0.2
-local TAP_DISTANCE_THRESHOLD = 50
+local TAP_DISTANCE_THRESHOLD = 1000
 
 TapGestureRecognizer = GestureRecognizer:subclass'TapGestureRecognizer'
 
@@ -45,6 +45,12 @@ function TapGestureRecognizer:touchEvent(eventType,id,x,y,touchCount)
 			self.releaseElapsedTime = nil
 		end
 	elseif self.state == 'recognized' then
+		if eventType == MOAITouchSensor.TOUCH_MOVE then
+			if not self:shouldRecognize() then
+				self:fail()
+				return
+			end
+		end
 		if self:getNumberOfTouches() > self.numberOfTouchesAllowed then
 			self:fail()
 			return
@@ -64,6 +70,7 @@ function TapGestureRecognizer:touchEvent(eventType,id,x,y,touchCount)
 			self.posStored = self.posStored or {}
 			table.insert(self.posStored,{x,y})
 			if (self:getNumberOfTouches() == 0) then
+				print(distanceSquare(self.initialPosition,findAveragePoint(self.posStored)))
 				if distanceSquare(self.initialPosition,findAveragePoint(self.posStored)) > TAP_DISTANCE_THRESHOLD then
 					self:fail()
 					return

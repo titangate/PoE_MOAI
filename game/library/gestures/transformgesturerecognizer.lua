@@ -72,13 +72,10 @@ function TransformGestureRecognizer:touchEvent(eventType,id,x,y,touchCount)
 			self.initialSize = self:getSize()
 		elseif eventType == MOAITouchSensor.TOUCH_MOVE then
 			if not self:shouldRecognize() then
-    			assert(false)
 				return
 			end
 			if self:getNumberOfTouches() < self.numberOfTouchesRequired then
-				--print ('touches',self:getNumberOfTouches())
-    			--assert(false)
-				--return
+				return
 			end
 			self:startRecognize()
 		elseif eventType == MOAITouchSensor.TOUCH_UP and self:getNumberOfTouches() < self.numberOfTouchesRequired then
