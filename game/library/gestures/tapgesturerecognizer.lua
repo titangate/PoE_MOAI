@@ -31,7 +31,6 @@ function TapGestureRecognizer:fail()
 end
 
 function TapGestureRecognizer:touchEvent(eventType,id,x,y,touchCount)
-	GestureRecognizer.touchEvent(self,eventType,id,x,y,touchCount)
 	if self.state == 'readyToRecognize' then
 		if (eventType == MOAITouchSensor.TOUCH_DOWN) then
 			if not self:shouldRecognize() then

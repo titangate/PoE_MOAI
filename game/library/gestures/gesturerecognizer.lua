@@ -7,7 +7,7 @@ end
 function GestureRecognizer:getTouches()
 	return coroutine.wrap(function()
 		for i,idx in ipairs{MOAIInputMgr.device.touch:getActiveTouches()} do
-			local x,y,tapCount = self:getTouch(idx)
+			local x,y,tapCount = GestureRecognizer.getTouch(idx)
 			x,y = translateCoordinatesFormInput(x,y)
 			coroutine.yield(x,y,tapCount,idx)
 		end
@@ -20,11 +20,11 @@ end
 
 function GestureRecognizer:updatePosition()
 	local tx,ty = 0,0
-	local tapCount = self:getNumberOfTouches()
+	local tapCount = GestureRecognizer.getNumberOfTouches()
 	if tapCount == 0 then
 		return unpack(GestureRecognizer.lastKnownLocation)
 	end
-	for x,y,_,idx in self:getTouches() do
+	for x,y,_,idx in GestureRecognizer.getTouches() do
 		tx = tx + x
 		ty = ty + y
 	end
@@ -46,8 +46,8 @@ end
 
 function GestureRecognizer:changeState(state)
 	self.state = state
-	if self.delegate and self.delegate.gestureRecognizerChangedState then
-		self.delegate:gestureRecognizerChangedState(self,state)
+	if self.onGestureRecognizerChangedState then
+		self.onGestureRecognizerChangedState(self,state)
 	end
 end
 
@@ -84,22 +84,24 @@ end
 
 function GestureRecognizer:finish()
 	local x,y = self:getPosition()
-	if self.delegate and self.delegate.gestureRecognizerFinished then
-		self.delegate:gestureRecognizerFinished(self)
+	
+	if self.onGestureRecognizerFinished then
+
+		self.onGestureRecognizerFinished(self)
 	end
 	self:changeState'readyToRecognize'
 end
 
 function GestureRecognizer:fail()
-	if self.delegate and self.delegate.gestureRecognizerFailed then
-		self.delegate:gestureRecognizerFailed(self)
+	if self.onGestureRecognizerFailed then
+		self.onGestureRecognizerFailed(self)
 	end
 	self:changeState'readyToRecognize'
 end
 
 function GestureRecognizer:change()
-	if self.delegate and self.delegate.gestureRecognizerChanged then
-		self.delegate:gestureRecognizerChanged(self)
+	if self.onGestureRecognizerChanged then
+		self.onGestureRecognizerChanged(self)
 	end
 end
 
@@ -107,15 +109,15 @@ function GestureRecognizer:requireGesturesToFail(...)
 	self.requireFailedGestures = arg
 end
 
-function GestureRecognizer:touchEvent(eventType,id,x,y,touchCount)
+function GestureRecognizer.touchEvent(eventType,id,x,y,touchCount)
 	if eventType == MOAITouchSensor.TOUCH_DOWN then
 		GestureRecognizer.touchCount = GestureRecognizer.touchCount + 1
-		self:updatePosition()
+		GestureRecognizer.updatePosition()
 	elseif eventType == MOAITouchSensor.TOUCH_UP then
-		self:updatePosition()
+		GestureRecognizer.updatePosition()
 		GestureRecognizer.touchCount = GestureRecognizer.touchCount - 1
 	else
-		self:updatePosition()
+		GestureRecognizer.updatePosition()
 	end
 end
 
