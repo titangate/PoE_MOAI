@@ -6,12 +6,12 @@ end
 
 function ActorLayer:clear()
 	-- todo: remove objects on the layer
-	self.actors = {}
 end
 
 function ActorLayer:loadGFX(viewport)
 	self.layer = MOAILayer2D.new()
 	self.layer:setViewport(viewport)
+	self.actors = {}
 end
 
 function ActorLayer:addActor(...)
@@ -20,9 +20,11 @@ function ActorLayer:addActor(...)
 		if v.getProps then
 			for prop in v:getProps() do
 				self.layer:insertProp(prop)
+				prop:setParent(self.layer)
 			end
 		else
 			self.layer:insertProp(v:getProp())
+			v:getProp():setParent(self.layer)
 		end
 	end
 end

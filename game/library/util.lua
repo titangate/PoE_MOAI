@@ -58,3 +58,12 @@ function findAveragePoint(t)
 	end
 	return {tx/#t,ty/#t}
 end
+
+ 
+function standardQuad(w,h)
+	return {-w/2,-h/2,w/2,h/2}
+end
+ 
+function R2D(r)
+	return r*57.2957795
+end

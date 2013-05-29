@@ -32,10 +32,12 @@ function StaticImageActor:getProp()
 end
 
 function StaticImageActor:update()
+	print 'update'
 	self.sprite:setRect(unpack(self.quad))
 	if self.delegate then
-		self.prop:setLoc(self.delegate:getPosition())
-		self.prop:setRot(self.delegate:getAngle())
+		--self.prop:setLoc(self.delegate:getPosition())
+		self.prop:setRot(R2D(self.delegate:getAngle()))
+		self.prop:setScl(self.delegate:getScale(),self.delegate:getScale())
 	end
 end
 

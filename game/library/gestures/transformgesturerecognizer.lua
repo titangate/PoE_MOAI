@@ -19,6 +19,11 @@ function TransformGestureRecognizer:collectTouches()
 	self.collectedTouches = touches
 end
 
+function TransformGestureRecognizer:getScale()
+	assert(self.initialSize)
+	return self:getSize()/self.initialSize
+end
+
 function TransformGestureRecognizer:getAngle()
 	assert(self.collectedTouches)
 	local touchA,touchB = unpack(self.collectedTouches)
@@ -67,6 +72,15 @@ function TransformGestureRecognizer:touchEvent(eventType,id,x,y,touchCount)
 			self.initialAngle = self:getAngle()
 			self.initialSize = self:getSize()
 		elseif eventType == MOAITouchSensor.TOUCH_MOVE then
+			if not self:shouldRecognize() then
+    			assert(false)
+				return
+			end
+			if self:getNumberOfTouches() < self.numberOfTouchesRequired then
+				--print ('touches',self:getNumberOfTouches())
+    			--assert(false)
+				--return
+			end
 			self:startRecognize()
 		elseif eventType == MOAITouchSensor.TOUCH_UP and self:getNumberOfTouches() < self.numberOfTouchesRequired then
 			return
