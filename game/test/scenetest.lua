@@ -22,13 +22,7 @@ for j=0,19 do
 	end
 end
 local layer = MOAILayer2D.new()
-local vp = MOAIViewport.new()
-local x,y = 0,0
-local w,h = screenWidth,screenHeight
-vp:setOffset(x,y)
-vp:setSize(w,h)
-vp:setScale(w,h)
-layer:setViewport(vp)
+layer:setViewport(standardViewport())
 local simpleScene = Map()
 simpleScene.width,simpleScene.height = 40,40
 simpleScene.ratio = 32

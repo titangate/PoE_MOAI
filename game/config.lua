@@ -20,7 +20,22 @@ if MOAIEnvironment.osBrand == 'iOS' then
 	if MOAIEnvironment.iosRetinaDisplay then
 		POE_GLOBALSCALE = 2.0
 	end
+	function standardViewport()
+		local vp = MOAIViewport.new()
+		vp:setOffset(0,0)
+		vp:setSize(screenWidth,screenHeight)
+		vp:setScale(screenWidth,screenHeight)
+		vp:setRotation(90)
+		return vp
+	end
 else
 	POE_CONTROLSCHEME = 'desktop'
 	INPUT_TRANSFORM_MATRIX = {1,0,0,1,0,0}
+	function standardViewport()
+		local vp = MOAIViewport.new()
+		vp:setOffset(0,0)
+		vp:setSize(screenWidth,screenHeight)
+		vp:setScale(screenWidth,screenHeight)
+		return vp
+	end
 end

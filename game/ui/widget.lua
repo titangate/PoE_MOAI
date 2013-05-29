@@ -3,15 +3,7 @@ Widget = ActorLayer:subclass'Widget'
 local layer = MOAILayer2D.new()
 function Widget.init(x,y,w,h)
 	Widget.base = Widget()
-	local vp = MOAIViewport.new()
-	vp:setOffset(x,y)
-	vp:setSize(w,h)
-	vp:setScale(w,h)
-
-	if MOAIEnvironment.osBrand == 'iOS' then
-		vp:setRotation(90)
-	end
-	layer:setViewport(vp)
+	layer:setViewport(standardViewport())
 	Widget.base.x,Widget.base.y = x,y
 	Widget.base.w,Widget.base.h = w,h
 	Widget.base:load()
