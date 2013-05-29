@@ -8,6 +8,7 @@ function GestureRecognizer:getTouches()
 	return coroutine.wrap(function()
 		for i,idx in ipairs{MOAIInputMgr.device.touch:getActiveTouches()} do
 			local x,y,tapCount = self:getTouch(idx)
+			x,y = translateCoordinatesFormInput(x,y)
 			coroutine.yield(x,y,tapCount,idx)
 		end
 	end)
@@ -115,4 +116,10 @@ function GestureRecognizer:touchEvent(eventType,id,x,y,touchCount)
 	else
 		self:updatePosition()
 	end
+end
+
+function translateCoordinatesFormInput(x,y)
+	assert(INPUT_TRANSFORM_MATRIX)
+	return INPUT_TRANSFORM_MATRIX[1] * x + INPUT_TRANSFORM_MATRIX[2] * y + INPUT_TRANSFORM_MATRIX[5]
+	, INPUT_TRANSFORM_MATRIX[3] * x + INPUT_TRANSFORM_MATRIX[4] * y + INPUT_TRANSFORM_MATRIX[6]
 end

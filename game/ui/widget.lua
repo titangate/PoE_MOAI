@@ -7,6 +7,10 @@ function Widget.init(x,y,w,h)
 	vp:setOffset(x,y)
 	vp:setSize(w,h)
 	vp:setScale(w,h)
+
+	if MOAIEnvironment.osBrand == 'iOS' then
+		vp:setRotation(90)
+	end
 	layer:setViewport(vp)
 	Widget.base.x,Widget.base.y = x,y
 	Widget.base.w,Widget.base.h = w,h

@@ -14,6 +14,7 @@ return function()
     base:addGestureRecognizer(tg)
     tg.delegate = base
     MOAIInputMgr.device.touch:setCallback(function(eventType,id,x,y,touchCount)
+        x,y = translateCoordinatesFormInput(x,y)
         tg:touchEvent(eventType,id,x,y,touchCount)
     end)
     function base:gestureRecognizerFinished()
