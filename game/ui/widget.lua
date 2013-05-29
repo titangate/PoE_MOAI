@@ -1,11 +1,17 @@
 Widget = ActorLayer:subclass'Widget'
 
+local layer = MOAILayer2D.new()
 function Widget.init(x,y,w,h)
 	Widget.base = Widget()
 	local vp = MOAIViewport.new()
+	vp:setOffset(x,y)
+	vp:setSize(w,h)
+	vp:setScale(w,h)
+	layer:setViewport(vp)
 	Widget.base.x,Widget.base.y = x,y
 	Widget.base.w,Widget.base.h = w,h
 	Widget.base:load()
+	Widget.layer = layer
 	Widget.base:setStyle{} -- default style
 	return Widget.base
 end
@@ -13,10 +19,6 @@ end
 function Widget:load()
 	assert (self.w and self.h, "invalid size")
 	assert (self.x and self.y, "invalid position")
-	local vp = MOAIViewport.new()
-	vp:setOffset(self.x,self.y)
-	vp:setSize(self.w,self.h)
-	vp:setScale(self.w,self.h)
 	self:loadGFX(vp)
 	self:setScale(1,1)
 	self:setAngle(0)
@@ -40,6 +42,7 @@ function Widget:insertWidget(child,index)
 	assert (instanceOf(Widget,child), 'attempt to add non-widget')
 	table.insert(self.children,index,child)
 	child.parent = self
+	child.layer = self.layer
 	ActorLayer.addActor(self,child)
 end
 
@@ -47,6 +50,7 @@ function Widget:addWidget(child)
 	assert (instanceOf(Widget,child), 'attempt to add non-widget')
 	table.insert(self.children,child)
 	child.parent = self
+	child.layer = self.layer
 	ActorLayer.addActor(self,child)
 end
 
@@ -68,20 +72,17 @@ end
  
 function Widget:setPosition(x,y)
 	self.x,self.y = x,y
-	self.layer:setLoc(x,y)
-	local vp = self.layer:getViewport()
-	vp:setOffset(x,y)
-	self.layer:setViewport(vp)
+	self.group:setLoc(x,y)
 end
  
 function Widget:setScale(sx,sy)
 	self.sx,self.sy = sx,sy
-	self.layer:setScl(sx,sy)
+	self.group:setScl(sx,sy)
 end
  
 function Widget:setAngle(angle)
 	self.angle = angle
-	self.layer:setRot(R2D(angle))
+	self.group:setRot(0,0,R2D(angle))
 end
  
 function Widget:getPosition()

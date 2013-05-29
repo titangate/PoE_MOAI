@@ -8,8 +8,8 @@ function ActorLayer:clear()
 end
 
 function ActorLayer:loadGFX(viewport)
-	self.layer = MOAILayer2D.new()
-	self.layer:setViewport(viewport)
+	self.group = MOAIProp.new()
+	--self.layer:setViewport(viewport)
 	self.actors = {}
 end
 
@@ -20,16 +20,16 @@ function ActorLayer:addActor(...)
 			for prop in v:getProps() do
 				self.layer:insertProp(prop)
 				--prop:setParent(self.layer)
-				prop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.layer, MOAIProp.TRANSFORM_TRAIT)
+				prop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
 			end
 		else
 			self.layer:insertProp(v:getProp())
 			--v:getProp():setParent(self.layer)
-			v:getProp():setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.layer, MOAIProp.TRANSFORM_TRAIT)
+			v:getProp():setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
 		end
 	end
 end
 
 function ActorLayer:getProp()
-	return self.layer
+	return self.group
 end

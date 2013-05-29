@@ -21,11 +21,19 @@ for j=0,19 do
 		tilelayer:setTile(i,j,t[j*30+i]+4)
 	end
 end
+local layer = MOAILayer2D.new()
+local vp = MOAIViewport.new()
+local x,y = 0,0
+local w,h = screenWidth,screenHeight
+vp:setOffset(x,y)
+vp:setSize(w,h)
+vp:setScale(w,h)
+layer:setViewport(vp)
 local simpleScene = Map()
 simpleScene.width,simpleScene.height = 40,40
 simpleScene.ratio = 32
 simpleScene.tileLayer = tilelayer
-simpleScene:load(viewport)
+simpleScene:load(layer)
 local unit1 = Unit()
 unit1:setPosition(300,300)
 simpleScene:addUnit(unit1)

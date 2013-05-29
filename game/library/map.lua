@@ -4,15 +4,17 @@ Map = Serializable:subclass'Map'
 -- Because this is a fully serializable object, there will be no initialization method. Rather,
 -- A load function is run upon serialization completed to ensure necessary entries for running
 local MAX_DIM = 1024
-function Map:load(viewport)
+function Map:load(layer)
 	assert(self.width > 0 and self.width < MAX_DIM,"Invalid Width")
 	assert(self.height > 0 and self.height < MAX_DIM,"Invalid Height")
 	assert(self.ratio,"Invalid Pixel to grid ratio")
+	assert(layer)
 	self.unit = self.unit or {}
 	self.layer = ActorLayer()
 	self.layer:clear()
+	self.layer.layer = layer
 	self.layer:load()
-	self.layer:loadGFX(viewport)
+	self.layer:loadGFX()
 	if self.tileLayer then
 		self:setTileLayer(self.tileLayer)
 	end
