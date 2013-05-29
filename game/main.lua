@@ -8,6 +8,7 @@ require 'middleclass'
 require 'library.init'
 require 'shader.init'
 require 'actor.init'
+require 'widget.init'
 require 'playground.maintest'
 require 'config'
 
