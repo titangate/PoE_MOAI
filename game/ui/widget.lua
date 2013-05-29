@@ -9,7 +9,40 @@ function Widget.init(x,y,w,h)
 	Widget.base:load()
 	Widget.layer = layer
 	Widget.base:setStyle{} -- default style
+	if POE_CONTROLSCHEME == 'mobile' then
+		MOAIInputMgr.device.touch:setCallback(function(eventType,id,x,y,touchCount)
+	        x,y = translateCoordinatesFormInput(x,y)
+	        GestureRecognizer.touchEvent(eventType,id,x,y,touchCount)
+	        Widget.base:touchEvent(eventType,id,x,y,touchCount)
+	    end)
+	else
+		MOAIInputMgr.device.mouseLeft:setCallback(function(isDown)
+			local x,y = MOAIInputMgr.device.pointer:getLoc()
+	        x,y = translateCoordinatesFormInput(x,y)
+			if isDown then
+				Widget.base:mousePressed('l',x,y)
+			else
+				Widget.base:mouseReleased('l',x,y)
+			end
+	    end)
+	end
 	return Widget.base
+end
+
+function Widget:touchEvent(...)
+	if self.recognizers then
+		for v,_ in pairs(self.recognizers) do
+			v:touchEvent(...)
+		end
+	end
+end
+
+function Widget:mousePressed(key,x,y)
+	print (key,'pressed at ',x,y)
+end
+
+function Widget:mouseReleased(key,x,y)
+	print (key,'released at ',x,y)
 end
 
 function Widget:load()
@@ -18,6 +51,7 @@ function Widget:load()
 	self:loadGFX(vp)
 	self:setScale(1,1)
 	self:setAngle(0)
+	self:setPosition(self.x,self.y)
 	self.children = self.children or {}
 end
 
@@ -108,6 +142,11 @@ function Widget:getAngle()
 	return self.angle
 end
 
+function Widget:inBound(x,y)
+	x,y = self.group:worldToModel(x,y)
+	return inRect(x,y,0,0,self.w,self.h)
+end
+
 function Widget:setStyle(style)
 	self.style = style
 end
@@ -136,7 +175,7 @@ function Widget:setBackgroundImage(image,quad)
 	--self.backgroundImage.delegate = self
 	self.backgroundImage:load()
 	self:addActor(self.backgroundImage)
-	self.backgroundImage.prop:setLoc(self.x,self.y)
+	--self.backgroundImage.prop:setLoc(self.x,self.y)
 	self:updateBackgroundImage()
 end
  
@@ -162,7 +201,7 @@ function Widget:enableDebugProp(debugEnabled)
 		if not self.debugprop then
 			self.debugprop = MOAIProp2D.new()
 			local deck = MOAIScriptDeck.new()
-			local x,y = self:getPosition()
+			local x,y = 0,0
 			local w,h = self:getSize()
 			local dx,dy = x-w/2,y-h/2
 			local dx2,dy2 = x+w/2,y+h/2

@@ -67,3 +67,7 @@ end
 function R2D(r)
 	return r*57.2957795
 end
+
+function inRect(x,y,rectX,rectY,w,h)
+	return x>=rectX-w/2 and x<=rectX+w/2 and y>=rectY-h/2 and y<=rectY+h/2
+end

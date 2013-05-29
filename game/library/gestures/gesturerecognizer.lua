@@ -1,6 +1,6 @@
 GestureRecognizer = Object:subclass'GestureRecognizer'
 
-function GestureRecognizer:getTouch(idx)
+function GestureRecognizer.getTouch(idx)
 	return MOAIInputMgr.device.touch:getTouch(idx)
 end
 
