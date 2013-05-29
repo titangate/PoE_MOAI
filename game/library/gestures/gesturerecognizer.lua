@@ -15,32 +15,33 @@ function GestureRecognizer:getTouches()
 end
 
 function GestureRecognizer:getNumberOfTouches()
-	return self.touchCount
+	return GestureRecognizer.touchCount
 end
 
 function GestureRecognizer:updatePosition()
 	local tx,ty = 0,0
 	local tapCount = self:getNumberOfTouches()
 	if tapCount == 0 then
-		return unpack(self.lastKnownLocation)
+		return unpack(GestureRecognizer.lastKnownLocation)
 	end
 	for x,y,_,idx in self:getTouches() do
 		tx = tx + x
 		ty = ty + y
 	end
 	tx,ty = tx/tapCount,ty/tapCount
-	self.lastKnownLocation = {tx,ty}
+	GestureRecognizer.lastKnownLocation = {tx,ty}
 	return tx,ty
 end
 
 function GestureRecognizer:getPosition()
-	return unpack(self.lastKnownLocation)
+	return unpack(GestureRecognizer.lastKnownLocation)
 end
+
+GestureRecognizer.touchCount = 0
+GestureRecognizer.lastKnownLocation = {0,0}
 
 function GestureRecognizer:initialize()
 	self.state = 'readyToRecognize'
-	self.touchCount = 0
-	self.lastKnownLocation = {0,0}
 end
 
 function GestureRecognizer:changeState(state)
@@ -108,11 +109,11 @@ end
 
 function GestureRecognizer:touchEvent(eventType,id,x,y,touchCount)
 	if eventType == MOAITouchSensor.TOUCH_DOWN then
-		self.touchCount = self.touchCount + 1
+		GestureRecognizer.touchCount = GestureRecognizer.touchCount + 1
 		self:updatePosition()
 	elseif eventType == MOAITouchSensor.TOUCH_UP then
 		self:updatePosition()
-		self.touchCount = self.touchCount - 1
+		GestureRecognizer.touchCount = GestureRecognizer.touchCount - 1
 	else
 		self:updatePosition()
 	end
