@@ -92,6 +92,10 @@ end
 function Widget:getPosition()
 	return self.x,self.y
 end
+
+function Widget:getSize()
+	return self.w,self.h
+end
  
 function Widget:getScale()
 	return self.sx,self.sy
@@ -128,6 +132,7 @@ function Widget:setBackgroundImage(image,quad)
 	--self.backgroundImage.delegate = self
 	self.backgroundImage:load()
 	self:addActor(self.backgroundImage)
+	self.backgroundImage.prop:setLoc(self.x,self.y)
 	self:updateBackgroundImage()
 end
  
@@ -135,4 +140,36 @@ function Widget:updateBackgroundImage()
 	assert(self.backgroundImage,"no background image set")
 	self.backgroundImage.quad = standardQuad(self.w,self.h)
 	self.backgroundImage:update()
+end
+
+function Widget:enableDebugProp(debugEnabled)
+	if self.debugEnabled == debugEnabled then
+		return
+	end
+	if debugEnabled then
+		if not self.debugprop then
+			self.debugprop = MOAIProp2D.new()
+			local deck = MOAIScriptDeck.new()
+			local x,y = self:getPosition()
+			local w,h = self:getSize()
+			local dx,dy = x-w/2,y-h/2
+			local dx2,dy2 = x+w/2,y+h/2
+			deck:setRect(x,y,x+w,y+h)
+			deck:setDrawCallback(function()
+				--assert(false)
+				MOAIDraw.drawRect(dx,dy,dx2,dy2)
+				MOAIDraw.drawLine(dx,dy,dx2+10,dy)
+				MOAIDraw.drawLine(dx,dy,dx,dy2+10)
+			end)
+			print 'deck set'
+			self.debugprop:setDeck(deck)
+		end
+		print 'prop aded'
+		self.layer:insertProp(self.debugprop)
+		self.debugprop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
+	end
+	for i,v in ipairs(self.children) do
+		v:enableDebugProp(debugEnabled)
+	end
+	self.debugEnabled = debugEnabled
 end
