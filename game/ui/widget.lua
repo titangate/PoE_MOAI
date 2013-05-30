@@ -6,9 +6,9 @@ function Widget.init(x,y,w,h)
 	layer:setViewport(standardViewport())
 	Widget.base.x,Widget.base.y = x,y
 	Widget.base.w,Widget.base.h = w,h
-	Widget.base:load()
+	Widget.base:load(Widget.base)
 	Widget.layer = layer
-	Widget.base:setStyle{} -- default style
+	Widget.base:setStyle(require 'ui.defaultstyle') -- default style
 	if POE_CONTROLSCHEME == 'mobile' then
 		MOAIInputMgr.device.touch:setCallback(function(eventType,id,x,y,touchCount)
 	        x,y = translateCoordinatesFormInput(x,y)
@@ -45,7 +45,8 @@ function Widget:mouseReleased(key,x,y)
 	print (key,'released at ',x,y)
 end
 
-function Widget:load()
+function Widget:load(parent)
+	assert (parent, "invalid parent")
 	assert (self.w and self.h, "invalid size")
 	assert (self.x and self.y, "invalid position")
 	self:loadGFX(vp)
@@ -53,6 +54,7 @@ function Widget:load()
 	self:setAngle(0)
 	self:setPosition(self.x,self.y)
 	self.children = self.children or {}
+	self.parent = parent
 end
 
 function Widget:loadGFX(viewport)
@@ -151,8 +153,15 @@ function Widget:setStyle(style)
 	self.style = style
 end
 
-function Widget:getStyle()
-	return self.style or self.parent:getStyle()
+function Widget:getStyle(c)
+	c = c or self.class.name
+	local style = self.style
+	if style then
+		assert(style[c],string.format("%s style not found",c))
+		return style[c]
+	else
+		return self.parent:getStyle(c)
+	end
 end
 
 function Widget:addGestureRecognizer(recognizer)

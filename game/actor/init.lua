@@ -1,3 +1,5 @@
 require 'actor.staticimageactor'
 require 'actor.debugunitactor'
 require 'actor.tilelayeractor'
+require 'actor.textboxactor'
+require 'actor.glowboxactor'
