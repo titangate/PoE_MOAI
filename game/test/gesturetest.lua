@@ -3,37 +3,58 @@ return function()
 	local base = Widget.init(0,0,screenWidth,screenHeight)
     local b = Widget()
     b.x,b.y = 0,0
-    b.w,b.h = 128,128
+    b.w,b.h = 960,338
     b:load()
-    b:setBackgroundImage("Icon_128.png")
+    b:setBackgroundImage("banner.png")
+
     base:addWidget(b)
+
+    local c = Widget()
+    c.x,c.y = 300,0
+    c.w,c.h = 128,128
+    c:load()
+    c:setBackgroundImage("Icon_128.png")
+    --c:setPosition(300,200)
+
+    b:addWidget(c)
+
     assert(POE_CONTROLSCHEME == 'mobile',"not running on mobile device")
     local tg = TransformGestureRecognizer()
 
-    base:addWidget(b)
     base:addGestureRecognizer(tg)
-    tg.delegate = base
-    MOAIInputMgr.device.touch:setCallback(function(eventType,id,x,y,touchCount)
-        x,y = translateCoordinatesFormInput(x,y)
-        tg:touchEvent(eventType,id,x,y,touchCount)
-    end)
-    function base:gestureRecognizerFinished()
+    function tg.onGestureRecognizerFinished()
         print 'gesture finished'
     end
 
-    function base:gestureRecognizerFailed()
+    function tg.onGestureRecognizerFailed()
         print 'gesture failed'
     end
 
-    function base:gestureRecognizerChanged(recognizer)
-        print('Position',recognizer:getPosition())
-        print('Angle',recognizer:getAngle())
-        print('Scale',recognizer:getScale())
+    function tg.onGestureRecognizerChanged(recognizer)
         b:setPosition(recognizer:getPosition())
         b:setAngle(recognizer:getAngle())
         b:setScale(recognizer:getScale(),recognizer:getScale())
-        b:updateBackgroundImage()
+        --b:updateBackgroundImage()
     end
 
-MOAIRenderMgr.pushRenderPass(base.layer)
+    local tgtap = TapGestureRecognizer()
+    base:addGestureRecognizer(tgtap)
+    tgtap:requireGesturesToFail(tg)
+
+    function tgtap:onGestureRecognizerFinished()
+        print 'tapped'
+        if b:inBound(self:getPosition()) then
+            b.backgroundImage:loadShader(Shader.vibrate(b.backgroundImage))
+        end
+    end
+    function tgtap:onGestureRecognizerChangedState(state)
+        print (state)
+    end
+
+    function tgtap.onGestureRecognizerFailed()
+        print 'gesture failed'
+    end
+
+    MOAIRenderMgr.pushRenderPass(base.layer)
+    base:enableDebugProp(true)
 end
