@@ -45,15 +45,22 @@ function TransformGestureRecognizer:startRecognize()
 	GestureRecognizer.startRecognize(self)
 end
 
-function TransformGestureRecognizer:finish()
+function TransformGestureRecognizer:clear()
 	self.pressElapsedTime,self.releaseElapsedTime = nil,nil
 	self.posStored = nil
+	self.initialPosition = nil
+	self.initialSize = nil
+	self.initialAngle = nil
+	self.collectedTouches = nil
+end
+
+function TransformGestureRecognizer:finish()
+	self:clear()
 	GestureRecognizer.finish(self)
 end
 
 function TransformGestureRecognizer:fail()
-	self.pressElapsedTime,self.releaseElapsedTime = nil,nil
-	self.posStored = nil
+	self:clear()
 	GestureRecognizer.fail(self)
 end
 
@@ -72,6 +79,9 @@ function TransformGestureRecognizer:touchEvent(eventType,id,x,y,touchCount)
 			self.initialSize = self:getSize()
 		elseif eventType == MOAITouchSensor.TOUCH_MOVE then
 			if not self:shouldRecognize() then
+				return
+			end
+			if not self.collectedTouches then
 				return
 			end
 			if self:getNumberOfTouches() < self.numberOfTouchesRequired then
