@@ -1,3 +1,9 @@
+function warning(condition,message,...)
+	if not condition then
+		message = message or "warning"
+		Logger.logWarningLevel(1,message,...)
+	end
+end
 
 function assertSameObject(a,b)
 	if (a==b) then return end
@@ -70,4 +76,10 @@ end
 
 function inRect(x,y,rectX,rectY,w,h)
 	return x>=rectX-w/2 and x<=rectX+w/2 and y>=rectY-h/2 and y<=rectY+h/2
+end
+
+function createWeakReferencedTable(param)
+	return setmetatable( {} , {
+		__mode = param
+	}) 
 end

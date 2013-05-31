@@ -1,7 +1,4 @@
-local textureRepo = {}
-setmetatable( textureRepo , {
-	__mode = "k"
-	}) -- weak reference, unused texture is collected
+local textureRepo = createWeakReferencedTable'k' -- weak reference, unused texture is collected
 
 function requireTexture(tex,tag)
 	tag = tag or 'default'
