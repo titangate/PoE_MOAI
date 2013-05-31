@@ -29,11 +29,16 @@ function Widget.init(x,y,w,h)
 	return Widget.base
 end
 
-function Widget:touchEvent(...)
+function Widget:touchEvent(eventType,id,x,y,touchCount)
+	if self.invis or self.disableInteractivity then return end
+	if not self:inBound(x,y) then return end
 	if self.recognizers then
 		for v,_ in pairs(self.recognizers) do
-			v:touchEvent(...)
+			v:touchEvent(eventType,id,x,y,touchCount)
 		end
+	end
+	for i,v in ipairs(self.children) do
+		v:touchEvent(eventType,id,x,y,touchCount)
 	end
 end
 
@@ -55,6 +60,20 @@ function Widget:load(parent)
 	self:setPosition(self.x,self.y)
 	self.children = self.children or {}
 	self.parent = parent
+end
+
+function Widget:setBorderStyle(style)
+	if style == 'none' then
+		-- do nothing
+	elseif style == 'box' or style == 'edge' then
+		local box = GlowBoxActor()
+		box.style = self:getStyle('GlowBoxActor')
+		box.x,box.y = self.x,self.y
+		box.w,box.h = self.w,self.h
+		box.borderStyle = style
+		box:load()
+		self:addActor(box)
+	end
 end
 
 function Widget:loadGFX(viewport)
