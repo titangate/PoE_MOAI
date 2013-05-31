@@ -1,5 +1,6 @@
 require 'unittest.utiltest'()
 require 'unittest.serializationtest'()
-require 'unittest.widget'()
+require 'unittest.loggertest'()
+require 'unittest.notificationtest'()
 
 print "Unit Test Succeeded"
