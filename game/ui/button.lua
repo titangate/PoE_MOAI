@@ -16,17 +16,15 @@ function Button:load(parent)
 	text:setAlignment(MOAITextBox.CENTER_JUSTIFY,MOAITextBox.CENTER_JUSTIFY)
 	b.layer:insertProp(text)
 	b.textbox = text]]
-	local box = GlowBoxActor()
+	--[[local box = GlowBoxActor()
 	box.style = self:getStyle('GlowBoxActor')
 	box.x,box.y = self.x,self.y
 	box.w,box.h = self.w,self.h
-	box.margin = 32
-	box.edgeimage = 'asset/ui/glowboxedge.png'
-	box:load()
+	box:load()]]
 
+	self:setBorderStyle'edge'
 	self.text:load()
 	self:addActor(self.text)
-	self:addActor(box)
 end
 
 function Button:setTitle(title)

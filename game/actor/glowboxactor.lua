@@ -3,8 +3,9 @@ GlowBoxActor = Actor:subclass'GlowBoxActor'
 function GlowBoxActor:load()
 	assert(self.w,self.h,"invalid dimension")
 	assert(self.style,"invalid style")
+	assert(self.borderStyle,"invalid borderStyle")
 	self.grid = MOAIGfxQuadListDeck2D.new()
-	self.grid:setTexture(requireTexture(self.style.edgeimage))
+	self.grid:setTexture(requireTexture(self.style.edgeimage[self.borderStyle]))
 	self.grid:reserveQuads(9)
 	local style = self.style
 	local halfW,halfH = self.w/2,self.h/2
@@ -42,8 +43,7 @@ function GlowBoxActor:getSize()
 end
 
 function GlowBoxActor:loadStyle(style)
-	self.edgeimage = style.edgeimage
-	self.quads = style.quads
+	self.edgeimage = style.edgeimage[style]
 end
 
 function GlowBoxActor:getProp()

@@ -14,9 +14,8 @@ function TextBoxActor:load()
 				self.text:setStyle(k,v)
 			end
 		end
-		self:setTextSize(s.textSize,s.dpi)
+		self:setTextStyle(s.font,s.color,s.textSize,s.dpi)
 		self:setAlignment(s.alignmentHorz,s.alignmentVert)
-		self:setFont(s.font)
 	end
 end
 
@@ -42,8 +41,12 @@ function TextBoxActor:setString(s)
 	self.text:setString(s)
 end
 
-function TextBoxActor:setTextSize(size,dpi)
-	self.text:setTextSize(size,dpi)
+function TextBoxActor:setTextStyle(font,color,size,dpi)
+	local style = MOAITextStyle.new()
+	style:setFont(font)
+	style:setSize(size,dpi)
+	self.text:setColor(unpack(color))
+	self.text:setStyle(style)
 end
 
 function TextBoxActor:setFont( font )
