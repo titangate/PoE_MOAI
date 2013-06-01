@@ -3,6 +3,14 @@ local TAP_DISTANCE_THRESHOLD = 1000
 
 TapGestureRecognizer = GestureRecognizer:subclass'TapGestureRecognizer'
 
+TapGestureRecognizer.eventListened = {
+	GestureStarted = true,
+	GestureChanged = true,
+	GestureChangedState = true,
+	GestureFailed = true,
+	GestureFinished = true,
+}
+
 function TapGestureRecognizer:initialize()
 	GestureRecognizer.initialize(self)
 	self.numberOfTouchesRequired = 1
@@ -70,7 +78,6 @@ function TapGestureRecognizer:touchEvent(eventType,id,x,y,touchCount)
 			self.posStored = self.posStored or {}
 			table.insert(self.posStored,{x,y})
 			if (self:getNumberOfTouches() == 0) then
-				print(distanceSquare(self.initialPosition,findAveragePoint(self.posStored)))
 				if distanceSquare(self.initialPosition,findAveragePoint(self.posStored)) > TAP_DISTANCE_THRESHOLD then
 					self:fail()
 					return

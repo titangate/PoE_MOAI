@@ -46,9 +46,7 @@ end
 
 function GestureRecognizer:changeState(state)
 	self.state = state
-	if self.onGestureRecognizerChangedState then
-		self.onGestureRecognizerChangedState(self,state)
-	end
+	self:pushNotification('GestureChangedState',{state = state})
 end
 
 function GestureRecognizer:recognized()
@@ -78,30 +76,25 @@ function GestureRecognizer:shouldRecognize()
 end
 
 function GestureRecognizer:startRecognize()
+
 	self:changeState'recognized'
 end
 
 function GestureRecognizer:finish()
 	local x,y = self:getPosition()
 	
-	if self.onGestureRecognizerFinished then
-
-		self.onGestureRecognizerFinished(self)
-	end
+	self:pushNotification('GestureFinished')
 	self:changeState'readyToRecognize'
 end
 
 function GestureRecognizer:fail()
-	if self.onGestureRecognizerFailed then
-		self.onGestureRecognizerFailed(self)
-	end
+	
+	self:pushNotification('GestureFailed')
 	self:changeState'readyToRecognize'
 end
 
 function GestureRecognizer:change()
-	if self.onGestureRecognizerChanged then
-		self.onGestureRecognizerChanged(self)
-	end
+	self:pushNotification('GestureChanged')
 end
 
 function GestureRecognizer:requireGesturesToFail(...)

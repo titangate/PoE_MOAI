@@ -10,10 +10,14 @@ function Notification.registerGlobalEventHandler(event,handler)
 	N[event][handler] = true
 end
 
-function Notification.deresgieterGlobalEventHandler(event,handler)
+function Notification.deregisterGlobalEventHandler(event,handler)
 	local N = Notification._handlers
 	if not N[event] then return end
-	N[event][handler] = nil
+	if handler then
+		N[event][handler] = nil
+	else
+		N[event] = nil
+	end
 end
 
 -- local observer
@@ -27,6 +31,16 @@ function Object:registerEventHandler(event,handler)
 	warning(self.class.eventListened,'No event list defined for this object')
 	if self.class.eventListened then
 		warning(self.class.eventListened[event],'%s not listened by this object',event)
+	end
+end
+
+function Object:deregisterEventHandler(event,handler)
+	local N = self._handlers
+	if not N or not N[event] then return end
+	if handler then
+		N[event][handler] = nil
+	else
+		N[event] = nil
 	end
 end
 

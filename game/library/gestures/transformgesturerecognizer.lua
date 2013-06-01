@@ -1,5 +1,12 @@
 TransformGestureRecognizer = GestureRecognizer:subclass'TransformGestureRecognizer'
 
+TransformGestureRecognizer.eventListened = {
+	GestureStarted = true,
+	GestureChanged = true,
+	GestureChangedState = true,
+	GestureFailed = true,
+	GestureFinished = true,
+}
 
 function TransformGestureRecognizer:initialize()
 	GestureRecognizer.initialize(self)
