@@ -26,6 +26,7 @@ function StaticImageActor:getProp()
 	if self.delegate then
 		--self.prop:setLoc(self.delegate:getPosition())
 	end
+	self.prop:setBlendMode(0x0302,0x0303) -- GL_SRC_ALPHA, GL_ONE_MINUS_SOURCE_ALPHA
 	return self.prop
 end
 

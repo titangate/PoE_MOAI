@@ -4,6 +4,8 @@ local chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,
 style.font = MOAIFont.new()
 style.font:loadFromTTF('asset/NeoSans.otf',chars,32,72)
 
+style.Widget = {}
+
 style.Button = {
 	text = {
 		textSize = 32,

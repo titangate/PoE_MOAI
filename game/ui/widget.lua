@@ -1,6 +1,8 @@
 Widget = ActorLayer:subclass'Widget'
-
 local layer = MOAILayer2D.new()
+local clearColor = MOAIColor.new()
+clearColor:setColor(0,0,0,0)
+layer:setClearColor(clearColor)
 function Widget.init(x,y,w,h)
 	Widget.base = Widget()
 	layer:setViewport(standardViewport())
@@ -158,7 +160,7 @@ end
 function Widget:getScale()
 	return self.sx,self.sy
 end
- 
+
 function Widget:getAngle()
 	return self.angle
 end
@@ -244,9 +246,26 @@ function Widget:enableDebugProp(debugEnabled)
 		end
 		self.layer:insertProp(self.debugprop)
 		self.debugprop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
+		self.debugprop:setAttrLink(MOAIColor.INHERIT_COLOR, self.group, MOAIColor.COLOR_TRAIT)
 	end
 	for i,v in ipairs(self.children) do
 		v:enableDebugProp(debugEnabled)
 	end
 	self.debugEnabled = debugEnabled
+end
+
+function Widget:transitionIn()
+	local r,g,b,a = unpack(self:getStyle().color or {1,1,1,1})
+	self.group:setColor(r,g,b,0)
+	self.group:seekColor(r,g,b,a,.5)
+	self.group:setScl(self.sx*1.5,self.sy*1.5)
+	self.group:seekScl(self.sx,self.sy,1,.5)
+end
+
+function Widget:transitionOut()
+	local r,g,b,a = unpack(self:getStyle().color or {1,1,1,1})
+	self.group:setColor(r,g,b,a)
+	self.group:seekColor(r,g,b,0,.5)
+	self.group:setScl(self.sx,self.sy)
+	self.group:seekScl(self.sx*1.5,self.sy*1.5,1,.5)
 end

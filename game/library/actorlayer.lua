@@ -16,6 +16,7 @@ end
 function ActorLayer:addProp(prop)
 	self.layer:insertProp(prop)
 	prop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
+	prop:setAttrLink(MOAIColor.INHERIT_COLOR, self.group, MOAIColor.COLOR_TRAIT)
 end
 
 function ActorLayer:removeProp(prop)
