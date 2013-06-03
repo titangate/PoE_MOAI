@@ -83,3 +83,15 @@ function createWeakReferencedTable(param)
 		__mode = param
 	}) 
 end
+
+function sortPropPriorities(toBeSorted)
+	local priorities = {}
+	for i,v in ipairs(toBeSorted) do
+		print ("%s priority: %d",tostring(v),v:getPriority())
+		table.insert(priorities,v:getPriority())
+	end
+	table.sort(priorities)
+	for i,v in ipairs(toBeSorted) do
+		v:setPriority(priorities[i])
+	end
+end

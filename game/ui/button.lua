@@ -12,3 +12,9 @@ end
 function Button:setTitle(title)
 	self.text:setString(title)
 end
+
+function Button:setBorderStyle(style)
+	Widget.setBorderStyle(self,style)
+	sortPropPriorities{self.border:getProp(),self.text:getProp()}
+end
+end
