@@ -17,4 +17,17 @@ function Button:setBorderStyle(style)
 	Widget.setBorderStyle(self,style)
 	sortPropPriorities{self.border:getProp(),self.text:getProp()}
 end
+
+function Button:registerEventHandler(event,handler)
+	if event == 'Click' then
+		if POE_CONTROLSCHEME == 'mobile' and self._tapGestureRecognizer == nil then
+			local tg = TapGestureRecognizer()
+			self:addGestureRecognizer(tg)
+			tg.registerEventHandler(tg,'GestureFinished',function()
+				self:pushNotification('Click')
+			end)
+			self._tapGestureRecognizer = tg
+		end
+	end
+	Widget.registerEventHandler(self,event,handler)
 end
