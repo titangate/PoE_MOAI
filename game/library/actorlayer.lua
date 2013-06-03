@@ -13,44 +13,57 @@ function ActorLayer:loadGFX(viewport)
 	self.actors = {}
 end
 
-function ActorLayer:addProp(prop)
+function ActorLayer:addProp(prop,linkAttr)
 	self.layer:insertProp(prop)
-	prop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
-	prop:setAttrLink(MOAIColor.INHERIT_COLOR, self.group, MOAIColor.COLOR_TRAIT)
+	if linkAttr then
+		prop:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.group, MOAIProp.TRANSFORM_TRAIT)
+		prop:setAttrLink(MOAIColor.INHERIT_COLOR, self.group, MOAIColor.COLOR_TRAIT)
+	end
 end
 
 function ActorLayer:removeProp(prop)
 	self.layer:removeProp(prop)
 end
 
-function ActorLayer:addActor(...)
-	for k,v in ipairs(arg) do
-		table.insert(self.actors,v)
-		if v.getProps then
-			for prop in v:getProps() do
-				self:addProp(prop)
+function ActorLayer:addActor(v,linkAttr)
+	if linkAttr == nil then
+		linkAttr = true
+	end
+	table.insert(self.actors,v)
+	if v.getProps then
+		for prop in v:getProps() do
+			self:addProp(prop,linkAttr)
+		end
+	else
+		self:addProp(v:getProp(),linkAttr)
+	end
+end
+
+function ActorLayer:removeActor(v)
+	for i,actor in pairs(self.actors) do
+		if actor == v then
+			table.remove(self.actors,i)
+			if v.getProps then
+				for prop in v:getProps() do
+					self:removeProp(prop)
+				end
+			else
+				self:removeProp(v:getProp())
 			end
-		else
-			self:addProp(v:getProp())
+			break
 		end
 	end
 end
 
-function ActorLayer:removeActor(...)
+function ActorLayer:addActors(...)
 	for k,v in ipairs(arg) do
-		for i,actor in pairs(self.actors) do
-			if actor == v then
-				table.remove(self.actors,i)
-				if v.getProps then
-					for prop in v:getProps() do
-						self:removeProp(prop)
-					end
-				else
-					self:removeProp(v:getProp())
-				end
-				break
-			end
-		end
+		self:addActor(v)
+	end
+end
+
+function ActorLayer:removeActors(...)
+	for k,v in ipairs(arg) do
+		self:removeActor(v)
 	end
 end
 
@@ -76,7 +89,7 @@ function ActorLayer:pushTransform()
 	local t = self._transformStack
 	t.x,t.y = self:getPosition()
 	t.sx,t.sy = self:getScale()
-	t.r = self:getAngle()
+	t.angle = self:getAngle()
 	table.insert(self._transformStack,t)
 end
 
@@ -85,7 +98,15 @@ function ActorLayer:popTransform()
 	local t = table.remove(self._transformStack)
 	self:setPosition(t.x,t.y)
 	self:setScale(t.sx,t.sy)
-	self:setAngle(t.r)
+	self:setAngle(t.angle)
+end
+
+function ActorLayer:applyTopTransform()
+	assert (self._transformStack and #self._transformStack > 0, 'transform not pushed')
+	local t = self._transformStack[#self._transformStack]
+	self:setPosition(t.x,t.y)
+	self:setScale(t.sx,t.sy)
+	self:setAngle(t.angle)
 end
 
 function ActorLayer:loadStandardTransform()
@@ -95,6 +116,7 @@ function ActorLayer:loadStandardTransform()
 end
 
 function ActorLayer:enablePreRender(enable)
+	-- TODO: unlink property for existing objects
 	if enable then
 		assert(not self._subprops,'pre render is already enabled')
 		self:pushTransform()
@@ -102,7 +124,7 @@ function ActorLayer:enablePreRender(enable)
 		local vp = MOAIViewport.new()
 		vp:setScale(self.w,-self.h)
 		vp:setSize(self.w,self.h)
-		vp:setRotation(0)
+		vp:setRotation(R2D(self.angle))
 		local layer = MOAILayer2D.new()
 		layer:setViewport(vp)
 		self._subprops = {}
@@ -122,6 +144,10 @@ function ActorLayer:enablePreRender(enable)
 		local group = MOAIProp.new()
 		self._group = self.group
 		self.group = group
+
+		self:applyTopTransform()
+		--group:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self._group, MOAIProp.TRANSFORM_TRAIT)
+		--group:setAttrLink(MOAIColor.INHERIT_COLOR, self._group, MOAIColor.COLOR_TRAIT)
 		return frameBuffer
 	else
 		assert(self._subprops,'pre render is not enabled')
