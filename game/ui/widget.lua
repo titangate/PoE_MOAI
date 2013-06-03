@@ -130,46 +130,6 @@ function Widget:clear()
 	end
 end
 
-function Widget:setSize(w,h)
-	self.w,self.h = w,h
-end
- 
-function Widget:setPosition(x,y)
-	self.x,self.y = x,y
-	self.group:setLoc(x,y)
-end
- 
-function Widget:setScale(sx,sy)
-	self.sx,self.sy = sx,sy
-	self.group:setScl(sx,sy)
-end
- 
-function Widget:setAngle(angle)
-	self.angle = angle
-	self.group:setRot(0,0,R2D(angle))
-end
- 
-function Widget:getPosition()
-	return self.x,self.y
-end
-
-function Widget:getSize()
-	return self.w,self.h
-end
- 
-function Widget:getScale()
-	return self.sx,self.sy
-end
-
-function Widget:getAngle()
-	return self.angle
-end
-
-function Widget:inBound(x,y)
-	x,y = self.group:worldToModel(x,y)
-	return inRect(x,y,0,0,self.w,self.h)
-end
-
 function Widget:setStyle(style)
 	self.style = style
 end
@@ -190,9 +150,23 @@ function Widget:addGestureRecognizer(recognizer)
 	self.recognizers[recognizer] = true
 end
 
+function Widget:enablePreRender(enable)
+	if enable then
+		local img = ActorLayer.enablePreRender(self,enable)
+		self._preRendered = StaticImageActor()
+		self._preRendered.image = img
+		self._preRendered.quad = standardQuad(self.w,self.h)
+		self._preRendered:load()
+		self:addActor(self._preRendered)
+	else
+		self:removeActor(self._preRendered)
+		ActorLayer.enablePreRender(self,enable)
+	end
+end
+
 function Widget:setBackgroundImage(image,quad)
 	if self.backgroundImage then
-		self.ActorLayer:removeActor(self.backgroundImage)
+		self:removeActor(self.backgroundImage)
 	end
 	if not image then return end
 	self.backgroundImage = StaticImageActor()
@@ -202,11 +176,8 @@ function Widget:setBackgroundImage(image,quad)
 	else
 		self.backgroundImage.quad = standardQuad(self.w,self.h)
 	end
-	--self.backgroundImage.delegate = self
 	self.backgroundImage:load()
 	self:addActor(self.backgroundImage)
-	--self.backgroundImage.prop:setLoc(self.x,self.y)
-	self:updateBackgroundImage()
 end
  
 function Widget:updateBackgroundImage()
@@ -255,6 +226,7 @@ function Widget:enableDebugProp(debugEnabled)
 end
 
 function Widget:transitionIn()
+	self:enablePreRender(true)
 	local r,g,b,a = unpack(self:getStyle().color or {1,1,1,1})
 	self.group:setColor(r,g,b,0)
 	self.group:seekColor(r,g,b,a,.5)
@@ -268,4 +240,10 @@ function Widget:transitionOut()
 	self.group:seekColor(r,g,b,0,.5)
 	self.group:setScl(self.sx,self.sy)
 	self.group:seekScl(self.sx*1.5,self.sy*1.5,1,.5)
+end
+
+function Widget:vibrateIn()
+	local shader = Shader.vibrate()
+	self.backgroundImage:setShader(shader)
+	self.backgroundImage:setScale(5,1)
 end
