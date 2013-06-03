@@ -2,6 +2,9 @@ local textureRepo = createWeakReferencedTable'k' -- weak reference, unused textu
 
 function requireTexture(tex,tag)
 	tag = tag or 'default'
+	if type(tex) ~= string then
+		return tex
+	end
 	ensureEntries(textureRepo,tag)
 	if textureRepo[tag][tex] == nil then
 		textureRepo[tag][tex] = MOAITexture.new()
