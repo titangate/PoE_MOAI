@@ -12,7 +12,6 @@ function Shader:setAttr(attr,target,duration,mode)
 	if duration then
 		return shader:seekAttr(attidx,target,duration,mode)
 	else
-		print 'immediate'
 		return shader:setAttr(attidx,target,duration,mode)
 	end
 end
