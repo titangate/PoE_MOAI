@@ -172,19 +172,19 @@ function ActorLayer:setSize(w,h)
 	self.w,self.h = w,h
 end
  
-function ActorLayer:setPosition(x,y)
+function ActorLayer:setPosition(x,y,...)
 	self.x,self.y = x,y
-	self.group:setLoc(x,y)
+	self.group:seekLoc(x,y,0,...)
 end
  
-function ActorLayer:setScale(sx,sy)
+function ActorLayer:setScale(sx,sy,...)
 	self.sx,self.sy = sx,sy
-	self.group:setScl(sx,sy)
+	self.group:seekScl(sx,sy,0,...)
 end
  
-function ActorLayer:setAngle(angle)
+function ActorLayer:setAngle(angle,...)
 	self.angle = angle
-	self.group:setRot(0,0,R2D(angle))
+	self.group:seekRot(0,0,R2D(angle),...)
 end
  
 function ActorLayer:getPosition()
