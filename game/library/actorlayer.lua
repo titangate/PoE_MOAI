@@ -23,6 +23,7 @@ end
 
 function ActorLayer:removeProp(prop)
 	self.layer:removeProp(prop)
+	prop:setScissorRect()
 end
 
 function ActorLayer:addActor(v,linkAttr)
@@ -74,6 +75,7 @@ end
 function ActorLayer:_getAllSubProps()
 	coroutine.yield(self.group)
 	for i,v in ipairs(self.actors) do
+		assert(v._getAllSubProps,string.format("%s does not have subprop accessor",tostring(v)))
 		v:_getAllSubProps()
 	end
 end

@@ -6,6 +6,35 @@ style.font:loadFromTTF('asset/NeoSans.otf',chars,32,72)
 
 style.Widget = {}
 
+style.Table = {
+	titleHeight = 20,
+	horizontalMargin = 10,
+	verticalMargin = 10,
+	spacing = 5,
+
+	text = {
+		textSize = 16,
+		dpi = 72,
+		alignmentHorz = 'center',
+		alignmentVert = 'right',
+		font = style.font,
+		color = {1,1,1}
+	},
+
+	titleStyle = {
+		Button = {
+			text = {
+				textSize = 20,
+				dpi = 72,
+				alignmentHorz = 'center',
+				alignmentVert = 'right',
+				font = style.font,
+				color = {1,1,1}
+			}
+		}
+	}
+}
+
 style.Button = {
 	text = {
 		textSize = 32,

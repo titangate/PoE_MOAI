@@ -54,6 +54,10 @@ function GlowBoxActor:getProp()
 	return self.prop
 end
 
+function GlowBoxActor:_getAllSubProps()
+	coroutine.yield(self.prop)
+end
+
 function GlowBoxActor:update()
 end
 

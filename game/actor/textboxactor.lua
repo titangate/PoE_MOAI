@@ -66,6 +66,10 @@ function TextBoxActor:getProp()
 	return self.text
 end
 
+function TextBoxActor:_getAllSubProps()
+	coroutine.yield(self.text)
+end
+
 function TextBoxActor:update()
 end
 

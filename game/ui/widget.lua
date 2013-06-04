@@ -75,6 +75,7 @@ function Widget:setBorderStyle(style)
 		box.borderStyle = style
 		box:load()
 		self.border = box
+		self.border:getProp():setPriority(-1)
 		self:addActor(box)
 	end
 end
