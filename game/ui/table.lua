@@ -12,21 +12,12 @@ function Table:load(parent)
 	self.title:setStyle(style.titleStyle)
 	self.title:load(self)
 	self:addWidget(self.title)
+
 end
 
-function Table:addActor(actor,...)
-	Widget.addActor(self,actor,...)
-	for prop in self:getAllSubProps() do
-		-- we don't want to scissor the border or the title
-		if self.title and prop == self.title.text:getProp() then
-			return
-		end
-		if self.border and prop == self.border:getProp() then
-			return
-		end
-		assert(prop.setScissorRect,string.format("%s doesn't have scissor property",tostring(prop)))
-		prop:setScissorRect(self.sc)
-	end
+function Table:enablePreRender(...)
+	Widget.enablePreRender(self,...)
+	--self._preRendered:getProp():setScissorRect(self.sc)
 end
 
 function Table:setTitle(title)
@@ -38,5 +29,7 @@ function Table:setBorderStyle(style)
 end
 
 function Table:setContentOffset(x,y,t,mode)
-
+	self:enablePreRender(true)
+	--self.group:seekLoc(x,y,0,t,mode)
+	--self.sc:seekLoc(x,y,0,t,mode)
 end

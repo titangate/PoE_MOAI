@@ -167,6 +167,7 @@ function Widget:enablePreRender(enable)
 end
 
 function Widget:setBackgroundImage(image,quad)
+	assert(image,"invalid image")
 	if self.backgroundImage then
 		self:removeActor(self.backgroundImage)
 	end
