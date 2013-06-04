@@ -38,6 +38,7 @@ function ActorLayer:addActor(v,linkAttr)
 	else
 		self:addProp(v:getProp(),linkAttr)
 	end
+	v.parent = self
 end
 
 function ActorLayer:removeActor(v)
@@ -89,10 +90,16 @@ end
 function ActorLayer:pushTransform()
 	self._transformStack = self._transformStack or {}
 	local t = self._transformStack
+	local x,y,r,sx,sy = self:getOverallTransform()
 	t.x,t.y = self:getPosition()
-	t.sx,t.sy = self:getScale()
 	t.angle = self:getAngle()
+	t.sx,t.sy = self:getScale()
 	table.insert(self._transformStack,t)
+	self.toptransform = {}
+	t = self.toptransform
+	t.x,t.y = x,y
+	t.angle = r
+	t.sx,t.sy = sx,sy
 end
 
 function ActorLayer:popTransform()
@@ -105,28 +112,26 @@ end
 
 function ActorLayer:applyTopTransform()
 	assert (self._transformStack and #self._transformStack > 0, 'transform not pushed')
-	local t = self._transformStack[#self._transformStack]
+	local t = self.toptransform --self._transformStack[#self._transformStack]
 	self:setPosition(t.x,t.y)
 	self:setScale(t.sx,t.sy)
 	self:setAngle(t.angle)
 end
 
 function ActorLayer:loadStandardTransform()
-	self:setPosition(0,0)
-	self:setScale(self.sx,self.sy)
-	self:setAngle(0)
+	local x,y,r,sx,sy = self:getOverallTransform()
+	self:setScale(1/sx,1/sy)
+	self:setAngle(-r)
+	self:setPosition(-x,-y)
 end
 
 function ActorLayer:enablePreRender(enable)
-	-- TODO: unlink property for existing objects
 	if enable then
 		assert(not self._subprops,'pre render is already enabled')
-		self:pushTransform()
-		self:loadStandardTransform()
 		local vp = MOAIViewport.new()
 		vp:setScale(self.w,-self.h)
 		vp:setSize(self.w,self.h)
-		vp:setRotation(R2D(self.angle))
+		vp:setRotation(R2D(self:getAngle()))
 		local layer = MOAILayer2D.new()
 		layer:setViewport(vp)
 		self._subprops = {}
@@ -139,7 +144,7 @@ function ActorLayer:enablePreRender(enable)
 		
 		frameBuffer:setRenderTable({layer})
 		frameBuffer:init(self:getSize())
-		frameBuffer:setClearColor ( 0, 0, 0, 1 )
+		frameBuffer:setClearColor ( 0, 0, 0, 0 )
 		MOAIRenderMgr.setBufferTable ({ frameBuffer })
 		self.prelayer = layer
 
@@ -147,9 +152,10 @@ function ActorLayer:enablePreRender(enable)
 		self._group = self.group
 		self.group = group
 
-		self:applyTopTransform()
-		--group:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self._group, MOAIProp.TRANSFORM_TRAIT)
-		--group:setAttrLink(MOAIColor.INHERIT_COLOR, self._group, MOAIColor.COLOR_TRAIT)
+		self._group:clearAttrLink(MOAIProp.INHERIT_TRANSFORM)
+
+		assert(self.parent.group)
+		group:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.parent.group, MOAIProp.TRANSFORM_TRAIT)
 		return frameBuffer
 	else
 		assert(self._subprops,'pre render is not enabled')
@@ -160,12 +166,8 @@ function ActorLayer:enablePreRender(enable)
 		self._subprops = nil
 		self.group = self._group
 		self._group = nil
-		self:popTransform()
+		self.group:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.parent.group, MOAIProp.TRANSFORM_TRAIT)
 	end
-end
-
-function ActorLayer:finishPreRender()
-	
 end
 
 function ActorLayer:setSize(w,h)
@@ -188,7 +190,7 @@ function ActorLayer:setAngle(angle,...)
 end
  
 function ActorLayer:getPosition()
-	return self.x,self.y
+	return self.group:getLoc()
 end
 
 function ActorLayer:getSize()
@@ -196,7 +198,7 @@ function ActorLayer:getSize()
 end
  
 function ActorLayer:getScale()
-	return self.sx,self.sy
+	return self.group:getScl()
 end
 
 function ActorLayer:getAngle()
@@ -206,4 +208,21 @@ end
 function ActorLayer:inBound(x,y)
 	x,y = self.group:worldToModel(x,y)
 	return inRect(x,y,0,0,self.w,self.h)
+end
+
+
+function ActorLayer:getOverallTransform(x,y,r,sx,sy)
+	transform = self.group
+	x,y = x or 0,y or 0
+	r = r or 0
+	sx,sy = sx or 1, sy or 1
+	r = r + transform:getRot()
+	local tsx,tsy = transform:getScl()
+	sx,sy = sx/tsx,sy/tsy
+	local tx,ty = transform:getLoc()
+	x,y = x+tx*tsx, y+ty*tsy
+	if self.parent and self.parent ~= self then
+		return self.parent:getOverallTransform(x,y,r,sx,sy)
+	end
+	return x,y,r,sx,sy
 end
