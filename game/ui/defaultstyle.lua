@@ -46,6 +46,22 @@ style.Button = {
 	}
 }
 
+style.TextBox = {
+	text = {
+		textSize = 32,
+		dpi = 72,
+		alignmentHorz = 'left',
+		alignmentVert = 'right',
+		font = style.font,
+		color = {1,1,1}
+	},
+	editButton = {
+		w = 40,
+		h = 40,
+		img = 'asset/ui/editbutton.png'
+	}
+}
+
 style.GlowBoxActor = {
 	edgeimage = {
 		box = 'asset/ui/glowbox-poe.png',
