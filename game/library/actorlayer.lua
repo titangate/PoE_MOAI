@@ -127,7 +127,9 @@ end
 
 function ActorLayer:enablePreRender(enable)
 	if enable then
-		assert(not self._subprops,'pre render is already enabled')
+		if self._subprops then
+			return
+		end
 		local vp = MOAIViewport.new()
 		vp:setScale(self.w,-self.h)
 		vp:setSize(self.w,self.h)
@@ -158,7 +160,9 @@ function ActorLayer:enablePreRender(enable)
 		group:setAttrLink(MOAIProp.INHERIT_TRANSFORM, self.parent.group, MOAIProp.TRANSFORM_TRAIT)
 		return frameBuffer
 	else
-		assert(self._subprops,'pre render is not enabled')
+		if not self._subprops then
+			return
+		end
 		for _,v in ipairs(self._subprops) do
 		self.prelayer:removeProp(v)
 		self.layer:insertProp(v)
