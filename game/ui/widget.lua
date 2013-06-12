@@ -198,6 +198,22 @@ function Widget:getProps()
 	  end)
 end
 
+function Widget:setSize(w,h,time,mode)
+	if time then
+		self.sizeChangeMeta = true
+		local thread = MOAIThread.new()
+		self.sizeChanger = MOAITransform2D.new()
+		thread:run(function()
+			self.sizeChanger:setScl(self.w,self.h)
+			MOAIThread.blockOnAction(self.sizeChanger:seekScl(w,h,time,mode))
+			self.sizeChangeMeta = nil
+			self.sizeChanger = nil
+		end)
+	else
+		self.w,self.h = w,h
+	end
+end
+
 function Widget:enableDebugProp(debugEnabled)
 	if self.debugEnabled == debugEnabled then
 		return
@@ -260,4 +276,40 @@ function Widget:vibrateIn()
 		MOAICoroutine.blockOnAction(shader:moveAttr('intensity',-5,.5))
 		self:enablePreRender()
 	end)
+end
+
+function Widget:setLayoutMode(mode)
+	if string.match(mode,"h") then
+		self.layoutHorizontal = true
+	else
+		self.layoutHorizontal = false
+	end
+	if string.match(mode,"v") then
+		self.layoutVertical = true
+	else
+		self.layoutVertical = false
+	end
+end
+
+function Widget:setNeedLayout()
+	self.layoutNeeded = true
+end
+
+function Widget:needLayout()
+	return self.layoutNeeded
+end
+
+function Widget:update(dt)
+	if self.sizeChangeMeta then
+		local w,h = self.sizeChanger:getScl()
+		self:setSize(w,h)
+	end
+	if self:needLayout() then
+		self.layoutNeeded = false
+	end
+	for i,v in ipairs(self.children) do
+		if v.update then
+			v:update(dt)
+		end
+	end
 end
