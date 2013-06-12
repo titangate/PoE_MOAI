@@ -30,7 +30,7 @@ if MOAIEnvironment.osBrand == 'iOS' then
 	end
 else
 	POE_CONTROLSCHEME = 'desktop'
-	INPUT_TRANSFORM_MATRIX = {1,0,0,1,-screenWidth/2,-screenHeight/2}
+	INPUT_TRANSFORM_MATRIX = {1,0,0,-1,-screenWidth/2,screenHeight/2}
 	function standardViewport()
 		local vp = MOAIViewport.new()
 		vp:setOffset(0,0)
