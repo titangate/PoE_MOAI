@@ -33,6 +33,7 @@ end
 
 function Widget:touchEvent(eventType,id,x,y,touchCount)
 	if self.invis or self.disableInteractivity then return end
+	x,y = self.group:worldToModel(x,y)
 	if not self:inBound(x,y) then return end
 	if self.recognizers then
 		for v,_ in pairs(self.recognizers) do

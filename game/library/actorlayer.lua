@@ -210,7 +210,6 @@ function ActorLayer:getAngle()
 end
 
 function ActorLayer:inBound(x,y)
-	x,y = self.group:worldToModel(x,y)
 	return inRect(x,y,0,0,self.w,self.h)
 end
 
