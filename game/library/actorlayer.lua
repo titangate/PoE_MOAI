@@ -185,7 +185,7 @@ end
  
 function ActorLayer:setScale(sx,sy,...)
 	self.sx,self.sy = sx,sy
-	self.group:seekScl(sx,sy,0,...)
+	self.group:seekScl(sx,sy,1,...)
 end
  
 function ActorLayer:setAngle(angle,...)

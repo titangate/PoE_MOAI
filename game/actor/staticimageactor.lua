@@ -20,7 +20,7 @@ end
 
 function StaticImageActor:setScale(x,y,t,mode)
 	if t then
-		return self.prop:seekScl(x,y,t,mode)
+		return self.prop:seekScl(x,y,1,t,mode)
 	else
 		return self.prop:setScl(x,y)
 	end
