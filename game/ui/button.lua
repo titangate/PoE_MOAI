@@ -26,6 +26,9 @@ function Button:registerEventHandler(event,handler)
 				self:pushNotification('Click')
 			end)
 			self._tapGestureRecognizer = tg
+			return
+		elseif POE_CONTROLSCHEME == 'desktop' then
+			self:registerEventHandler('mouseReleased',handler)
 		end
 	end
 	Widget.registerEventHandler(self,event,handler)

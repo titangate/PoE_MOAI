@@ -46,11 +46,32 @@ function Widget:touchEvent(eventType,id,x,y,touchCount)
 end
 
 function Widget:mousePressed(key,x,y)
-	print (key,'pressed at ',x,y)
+	if self.invis or self.disableInteractivity then return end
+	x,y = self.group:worldToModel(x,y)
+	if not self:inBound(x,y) then return end
+	self:pushNotification("MousePressed",{
+			key = key,
+			x = x,
+			y = y
+		})
+	for i,v in ipairs(self.children) do
+		v:mousePressed(key,x,y)
+	end
 end
 
 function Widget:mouseReleased(key,x,y)
-	print (key,'released at ',x,y)
+	if self.invis or self.disableInteractivity then return end
+	local x2,y2 = self.group:worldToModel(x,y)
+	x,y = self.group:worldToModel(x,y)
+	if not self:inBound(x,y) then return end
+	self:pushNotification("MouseReleased",{
+			key = key,
+			x = x,
+			y = y
+		})
+	for i,v in ipairs(self.children) do
+		v:mouseReleased(key,x,y)
+	end
 end
 
 function Widget:load(parent)
