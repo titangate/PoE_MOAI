@@ -1,12 +1,7 @@
-TextBox = Widget:subclass'TextBox'
+TextBox = Button:subclass'TextBox'
 
 function TextBox:load(parent)
-	Widget.load(self,parent)
-	self.text = TextBoxActor()
-	self.text.quad = standardQuad(self.w,self.h)
-	self.text.style = self:getStyle().text
-	self.text:load()
-	self:addActor(self.text)
+	Button.load(self,parent)	
 	local style = self:getStyle().editButton
 	self.editButton = Button()
 	self.editButton.w,self.editButton.h = style.w,style.h
@@ -15,14 +10,6 @@ function TextBox:load(parent)
 	self.editButton:load(self)
 	self.editButton:setBackgroundImage(style.img)
 	self:addActor(self.editButton)
-end
-
-function TextBox:setTitle(title)
-	self.text:setString(title)
-end
-
-function TextBox:setBorderStyle(style)
-	Widget.setBorderStyle(self,style)
 end
 
 function TextBox:registerEventHandler(event,handler)
@@ -36,5 +23,5 @@ function TextBox:registerEventHandler(event,handler)
 			self._tapGestureRecognizer = tg
 		end
 	end
-	Widget.registerEventHandler(self,event,handler)
+	Button.registerEventHandler(self,event,handler)
 end
